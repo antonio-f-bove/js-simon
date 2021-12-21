@@ -20,23 +20,40 @@ function toggleHideHtml(container) {
 }
 
 function playGame(numbersArray, containerHtml1, containerHtml2) {
-  const userGuessed = [];
-  const userMissed = [];
+  const userGuesses = [];
+  let correctGuesses = 0;
   
-  while (userGuessed.length + userMissed.length < 5) {
-    const userNum = parseInt(prompt('Inserisci un numero'));
-    
-    if (numbersArray.includes(userNum)){
-      userGuessed.push(userNum);
-      printBoxHtml(userNum, containerHtml2, 'green')
+  for (let i = 0; i < numbersArray.length; i++) {
+    userGuesses[i] = parseInt(prompt('Inserisci un numero'));
+
+    if (numbersArray[i] === userGuesses[i]){
+      printBoxHtml(userGuesses[i], containerHtml2, 'green');
+      correctGuesses++;
     } else {
-      userMissed.push(userNum);
-      printBoxHtml(userNum, containerHtml2, 'red')
+      printBoxHtml(userGuesses[i], containerHtml2, 'red');
     }
   }
 
   toggleHideHtml(containerHtml1);
 
+  guessedHtml = document.querySelector('.guessed');
+  guessedHtml.append(`You guessed ${correctGuesses} correct answers:`)
+  missedHtml = document.querySelector('.missed');
+  missedHtml.append(`You missed ${numbersArray.length - correctGuesses} answers:`)
+
+  for(let i = 0; i < numbersArray.length; i++) {
+    if (numbersArray[i] === userGuesses[i]) {
+      guessedHtml.append(`${userGuesses[i]}  `);
+    } else {
+      missedHtml.append(`${userGuesses[i]}  `)
+    }
+  }
+
+  statsHtml = document.getElementById('stats');
+  if (correctGuesses !== numbersArray.length) {
+    statsHtml.style.background = 'red';
+  }
+  toggleHideHtml(statsHtml);
 }
 
 
